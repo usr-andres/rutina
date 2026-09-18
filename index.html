@@ -29,405 +29,111 @@
       --accent-glow: rgba(16, 185, 129, 0.3);
       --current-glow: rgba(59, 130, 246, 0.35);
       --current-border: #3b82f6;
-      --warning: #f59e0b;
       --danger: #ef4444;
       --text-main: #f3f4f6;
       --text-muted: #9ca3af;
       --font: 'Plus Jakarta Sans', sans-serif;
     }
 
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-      -webkit-tap-highlight-color: transparent;
-    }
+    * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
 
     body {
       background-color: var(--bg);
       background-image: 
         radial-gradient(at 0% 0%, rgba(16, 185, 129, 0.08) 0px, transparent 50%),
         radial-gradient(at 100% 100%, rgba(59, 130, 246, 0.09) 0px, transparent 50%);
-      color: var(--text-main);
-      font-family: var(--font);
-      min-height: 100vh;
-      display: flex;
-      justify-content: center;
+      color: var(--text-main); font-family: var(--font);
+      min-height: 100vh; display: flex; justify-content: center;
       padding: 1.25rem 0.85rem 3rem;
     }
 
-    .app-container {
-      width: 100%;
-      max-width: 490px;
-      display: flex;
-      flex-direction: column;
-      gap: 1.15rem;
-    }
+    .app-container { width: 100%; max-width: 490px; display: flex; flex-direction: column; gap: 1.15rem; }
 
-    header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 0.25rem 0.2rem;
-    }
-
-    .header-left {
-      display: flex;
-      flex-direction: column;
-      gap: 0.2rem;
-    }
-
-    .current-clock {
-      font-size: 1.5rem;
-      font-weight: 800;
-      letter-spacing: -0.03em;
-      color: #fff;
-    }
-
+    header { display: flex; justify-content: space-between; align-items: center; padding: 0.25rem 0.2rem; }
+    .header-left { display: flex; flex-direction: column; gap: 0.2rem; }
+    .current-clock { font-size: 1.5rem; font-weight: 800; letter-spacing: -0.03em; color: #fff; }
+    
     .streak-badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.35rem;
-      font-size: 0.8rem;
-      font-weight: 700;
-      color: #fb923c;
-      background: rgba(251, 146, 60, 0.12);
-      border: 1px solid rgba(251, 146, 60, 0.25);
-      padding: 0.3rem 0.65rem;
-      border-radius: 999px;
-      width: fit-content;
+      display: inline-flex; align-items: center; gap: 0.35rem; font-size: 0.8rem; font-weight: 700;
+      color: #fb923c; background: rgba(251, 146, 60, 0.12); border: 1px solid rgba(251, 146, 60, 0.25);
+      padding: 0.3rem 0.65rem; border-radius: 999px; width: fit-content;
     }
 
-    /* Barra de navegación de fecha */
     .date-nav {
-      background: var(--card-bg);
-      border: 1px solid var(--card-border);
-      border-radius: 18px;
-      padding: 0.6rem 0.8rem;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      backdrop-filter: blur(14px);
+      background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 18px;
+      padding: 0.6rem 0.8rem; display: flex; align-items: center; justify-content: space-between; backdrop-filter: blur(14px);
     }
-
     .nav-btn {
-      background: rgba(255, 255, 255, 0.06);
-      border: 1px solid var(--card-border);
-      color: var(--text-main);
-      width: 36px;
-      height: 36px;
-      border-radius: 12px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      font-size: 1.1rem;
-      transition: all 0.2s ease;
+      background: rgba(255, 255, 255, 0.06); border: 1px solid var(--card-border); color: var(--text-main);
+      width: 36px; height: 36px; border-radius: 12px; display: flex; align-items: center; justify-content: center;
+      cursor: pointer; font-size: 1.1rem; transition: all 0.2s ease;
     }
+    .nav-btn:active { transform: scale(0.92); background: rgba(255, 255, 255, 0.12); }
+    .date-display { display: flex; flex-direction: column; align-items: center; gap: 0.15rem; }
+    .date-title { font-size: 0.92rem; font-weight: 700; letter-spacing: -0.01em; }
+    .today-pill { font-size: 0.68rem; font-weight: 700; color: var(--accent); text-transform: uppercase; letter-spacing: 0.05em; cursor: pointer; }
 
-    .nav-btn:active {
-      transform: scale(0.92);
-      background: rgba(255, 255, 255, 0.12);
-    }
+    .progress-card { background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 20px; padding: 1.15rem 1.25rem; backdrop-filter: blur(16px); box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.4); }
+    .progress-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem; }
+    .progress-title { font-size: 0.9rem; font-weight: 600; color: var(--text-muted); }
+    .progress-pct { font-size: 1.35rem; font-weight: 800; color: var(--accent); }
+    .bar-bg { background: rgba(255, 255, 255, 0.07); height: 10px; border-radius: 999px; overflow: hidden; }
+    .bar-fill { background: linear-gradient(90deg, #10b981, #3b82f6); height: 100%; width: 0%; border-radius: 999px; transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1); }
 
-    .date-display {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 0.15rem;
-    }
-
-    .date-title {
-      font-size: 0.92rem;
-      font-weight: 700;
-      letter-spacing: -0.01em;
-    }
-
-    .today-pill {
-      font-size: 0.68rem;
-      font-weight: 700;
-      color: var(--accent);
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-      cursor: pointer;
-    }
-
-    /* Tarjeta de progreso */
-    .progress-card {
-      background: var(--card-bg);
-      border: 1px solid var(--card-border);
-      border-radius: 20px;
-      padding: 1.15rem 1.25rem;
-      backdrop-filter: blur(16px);
-      box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.4);
-    }
-
-    .progress-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 0.75rem;
-    }
-
-    .progress-title {
-      font-size: 0.9rem;
-      font-weight: 600;
-      color: var(--text-muted);
-    }
-
-    .progress-pct {
-      font-size: 1.35rem;
-      font-weight: 800;
-      color: var(--accent);
-    }
-
-    .bar-bg {
-      background: rgba(255, 255, 255, 0.07);
-      height: 10px;
-      border-radius: 999px;
-      overflow: hidden;
-    }
-
-    .bar-fill {
-      background: linear-gradient(90deg, #10b981, #3b82f6);
-      height: 100%;
-      width: 0%;
-      border-radius: 999px;
-      transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-    }
-
-    /* Barra de acciones rápidas (Reinicio y Descarga) */
-    .actions-row {
-      display: flex;
-      gap: 0.6rem;
-    }
-
+    .actions-row { display: flex; gap: 0.6rem; }
     .action-btn {
-      flex: 1;
-      background: var(--card-bg);
-      border: 1px solid var(--card-border);
-      color: var(--text-muted);
-      border-radius: 14px;
-      padding: 0.55rem 0.8rem;
-      font-size: 0.78rem;
-      font-weight: 600;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 0.4rem;
-      cursor: pointer;
-      backdrop-filter: blur(10px);
-      transition: all 0.2s;
-      text-decoration: none;
+      flex: 1; background: var(--card-bg); border: 1px solid var(--card-border); color: var(--text-muted);
+      border-radius: 14px; padding: 0.55rem 0.8rem; font-size: 0.78rem; font-weight: 600;
+      display: inline-flex; align-items: center; justify-content: center; gap: 0.4rem; cursor: pointer;
+      backdrop-filter: blur(10px); transition: all 0.2s; text-decoration: none;
     }
+    .action-btn:active { transform: scale(0.97); color: var(--text-main); border-color: rgba(255, 255, 255, 0.2); }
+    .action-btn.reset:hover { color: var(--danger); border-color: rgba(239, 68, 68, 0.3); }
 
-    .action-btn:active {
-      transform: scale(0.97);
-      color: var(--text-main);
-      border-color: rgba(255, 255, 255, 0.2);
-    }
-
-    .action-btn.reset:hover {
-      color: var(--danger);
-      border-color: rgba(239, 68, 68, 0.3);
-    }
-
-    /* Lista de tareas / bloques */
-    .routine-list {
-      display: flex;
-      flex-direction: column;
-      gap: 0.75rem;
-    }
-
+    .routine-list { display: flex; flex-direction: column; gap: 0.75rem; }
     .task-item {
-      background: var(--card-bg);
-      border: 1px solid var(--card-border);
-      border-radius: 16px;
-      padding: 0.95rem 1rem;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 0.8rem;
-      backdrop-filter: blur(12px);
-      cursor: pointer;
-      transition: all 0.2s ease;
-      user-select: none;
-      position: relative;
+      background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 16px; padding: 0.95rem 1rem;
+      display: flex; align-items: center; justify-content: space-between; gap: 0.8rem; backdrop-filter: blur(12px);
+      cursor: pointer; transition: all 0.2s ease; user-select: none; position: relative;
     }
-
-    .task-item:active {
-      transform: scale(0.985);
-    }
-
-    /* Estado: Bloque en curso */
-    .task-item.is-current {
-      border-color: var(--current-border);
-      background: rgba(59, 130, 246, 0.08);
-      box-shadow: 0 0 20px var(--current-glow);
-    }
-
+    .task-item:active { transform: scale(0.985); }
+    .task-item.is-current { border-color: var(--current-border); background: rgba(59, 130, 246, 0.08); box-shadow: 0 0 20px var(--current-glow); }
+    
     .current-badge {
-      display: none;
-      font-size: 0.65rem;
-      font-weight: 800;
-      color: #60a5fa;
-      background: rgba(59, 130, 246, 0.18);
-      padding: 0.18rem 0.45rem;
-      border-radius: 6px;
-      letter-spacing: 0.05em;
-      animation: pulse 1.8s infinite;
+      display: none; font-size: 0.65rem; font-weight: 800; color: #60a5fa; background: rgba(59, 130, 246, 0.18);
+      padding: 0.18rem 0.45rem; border-radius: 6px; letter-spacing: 0.05em; animation: pulse 1.8s infinite;
     }
+    .task-item.is-current .current-badge { display: inline-block; }
+    @keyframes pulse { 0% { opacity: 0.6; } 50% { opacity: 1; } 100% { opacity: 0.6; } }
 
-    .task-item.is-current .current-badge {
-      display: inline-block;
-    }
-
-    @keyframes pulse {
-      0% { opacity: 0.6; }
-      50% { opacity: 1; }
-      100% { opacity: 0.6; }
-    }
-
-    /* Estado: Completado */
-    .task-item.is-completed {
-      border-color: rgba(16, 185, 129, 0.35);
-      background: rgba(16, 185, 129, 0.05);
-    }
-
-    .task-item.is-completed .task-title {
-      text-decoration: line-through;
-      color: var(--text-muted);
-    }
-
-    .task-info {
-      display: flex;
-      flex-direction: column;
-      gap: 0.22rem;
-      flex: 1;
-    }
-
-    .task-meta {
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-    }
-
-    .task-time {
-      font-size: 0.74rem;
-      font-weight: 700;
-      color: var(--accent);
-    }
-
-    .task-item.is-current .task-time {
-      color: #60a5fa;
-    }
-
-    .task-title {
-      font-size: 0.94rem;
-      font-weight: 600;
-      letter-spacing: -0.01em;
-      transition: color 0.2s;
-    }
-
-    .task-sub {
-      font-size: 0.78rem;
-      color: var(--text-muted);
-      line-height: 1.3;
-    }
+    .task-item.is-completed { border-color: rgba(16, 185, 129, 0.35); background: rgba(16, 185, 129, 0.05); }
+    .task-item.is-completed .task-title { text-decoration: line-through; color: var(--text-muted); }
+    .task-info { display: flex; flex-direction: column; gap: 0.22rem; flex: 1; }
+    .task-meta { display: flex; align-items: center; gap: 0.5rem; }
+    .task-time { font-size: 0.74rem; font-weight: 700; color: var(--accent); }
+    .task-item.is-current .task-time { color: #60a5fa; }
+    .task-title { font-size: 0.94rem; font-weight: 600; letter-spacing: -0.01em; transition: color 0.2s; }
+    .task-sub { font-size: 0.78rem; color: var(--text-muted); line-height: 1.3; }
 
     .custom-check {
-      width: 28px;
-      height: 28px;
-      border-radius: 50%;
-      border: 2px solid var(--card-border);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background: rgba(255, 255, 255, 0.03);
-      flex-shrink: 0;
-      transition: all 0.2s;
+      width: 28px; height: 28px; border-radius: 50%; border: 2px solid var(--card-border);
+      display: flex; align-items: center; justify-content: center; background: rgba(255, 255, 255, 0.03);
+      flex-shrink: 0; transition: all 0.2s;
     }
+    .task-item.is-completed .custom-check { background: var(--accent); border-color: var(--accent); box-shadow: 0 0 12px var(--accent-glow); }
+    .custom-check svg { opacity: 0; transform: scale(0.5); transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1); }
+    .task-item.is-completed .custom-check svg { opacity: 1; transform: scale(1); }
 
-    .task-item.is-completed .custom-check {
-      background: var(--accent);
-      border-color: var(--accent);
-      box-shadow: 0 0 12px var(--accent-glow);
-    }
-
-    .custom-check svg {
-      opacity: 0;
-      transform: scale(0.5);
-      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-    }
-
-    .task-item.is-completed .custom-check svg {
-      opacity: 1;
-      transform: scale(1);
-    }
-
-    /* Modal de descarga */
-    .modal-backdrop {
-      display: none;
-      position: fixed;
-      inset: 0;
-      background: rgba(0, 0, 0, 0.75);
-      backdrop-filter: blur(8px);
-      z-index: 99;
-      align-items: center;
-      justify-content: center;
-      padding: 1rem;
-    }
-
-    .modal-card {
-      background: #121829;
-      border: 1px solid var(--card-border);
-      border-radius: 20px;
-      padding: 1.4rem;
-      width: 100%;
-      max-width: 380px;
-      display: flex;
-      flex-direction: column;
-      gap: 1rem;
-    }
-
-    .modal-title {
-      font-size: 1.1rem;
-      font-weight: 700;
-    }
-
-    .modal-sub {
-      font-size: 0.82rem;
-      color: var(--text-muted);
-      line-height: 1.4;
-    }
-
-    .modal-btn {
-      background: rgba(255, 255, 255, 0.06);
-      border: 1px solid var(--card-border);
-      color: var(--text-main);
-      padding: 0.75rem;
-      border-radius: 12px;
-      font-size: 0.85rem;
-      font-weight: 600;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 0.5rem;
-    }
-
-    .modal-btn.primary {
-      background: var(--accent);
-      color: #052e16;
-      border-color: var(--accent);
-    }
-
-    .modal-btn.close {
-      background: transparent;
-      border: none;
-      color: var(--text-muted);
-      margin-top: 0.2rem;
-    }
+    .modal-backdrop { display: none; position: fixed; inset: 0; background: rgba(0, 0, 0, 0.75); backdrop-filter: blur(8px); z-index: 99; align-items: center; justify-content: center; padding: 1rem; }
+    .modal-card { background: #121829; border: 1px solid var(--card-border); border-radius: 20px; padding: 1.4rem; width: 100%; max-width: 380px; display: flex; flex-direction: column; gap: 1rem; }
+    .modal-title { font-size: 1.1rem; font-weight: 700; }
+    .modal-sub { font-size: 0.82rem; color: var(--text-muted); line-height: 1.4; }
+    
+    .modal-btn { background: rgba(255, 255, 255, 0.06); border: 1px solid var(--card-border); color: var(--text-main); padding: 0.75rem; border-radius: 12px; font-size: 0.85rem; font-weight: 600; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 0.5rem; transition: 0.2s; }
+    .modal-btn:hover { background: rgba(255, 255, 255, 0.1); }
+    .modal-btn.primary { background: var(--accent); color: #052e16; border-color: var(--accent); }
+    .modal-btn.secondary { background: #3b82f6; color: #fff; border-color: #3b82f6; }
+    .modal-btn.close { background: transparent; border: none; color: var(--text-muted); margin-top: 0.2rem; }
   </style>
 </head>
 <body>
@@ -436,34 +142,27 @@
     <header>
       <div class="header-left">
         <div class="current-clock" id="current-time">00:00:00 AM</div>
-        <div class="streak-badge">
-          <span>🔥</span> <span id="streak-count">0 días de racha</span>
-        </div>
+        <div class="streak-badge"><span>🔥</span> <span id="streak-count">0 días de racha</span></div>
       </div>
     </header>
 
-    <!-- Navegación de Días -->
     <div class="date-nav">
-      <button class="nav-btn" onclick="changeDay(-1)" title="Día anterior">‹</button>
+      <button class="nav-btn" onclick="changeDay(-1)">‹</button>
       <div class="date-display">
         <div class="date-title" id="display-date">Hoy</div>
         <div class="today-pill" onclick="goToToday()" id="today-btn">VOLVER A HOY</div>
       </div>
-      <button class="nav-btn" onclick="changeDay(1)" title="Día siguiente">›</button>
+      <button class="nav-btn" onclick="changeDay(1)">›</button>
     </div>
 
-    <!-- Barra de progreso -->
     <div class="progress-card">
       <div class="progress-header">
         <span class="progress-title">Progreso del Día</span>
         <span class="progress-pct" id="progress-pct">0%</span>
       </div>
-      <div class="bar-bg">
-        <div class="bar-fill" id="bar-fill"></div>
-      </div>
+      <div class="bar-bg"><div class="bar-fill" id="bar-fill"></div></div>
     </div>
 
-    <!-- Acciones Rápidas -->
     <div class="actions-row">
       <button class="action-btn reset" onclick="confirmReset()">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>
@@ -471,51 +170,77 @@
       </button>
       <button class="action-btn" onclick="openExportModal()">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-        Descargar datos
+        Sincronizar
       </button>
     </div>
 
-    <!-- Lista de Bloques de la Rutina -->
     <div class="routine-list" id="routine-list"></div>
   </div>
 
-  <!-- Modal de Descarga / Exportación -->
   <div class="modal-backdrop" id="export-modal">
     <div class="modal-card">
-      <div class="modal-title">Descargar Información</div>
-      <div class="modal-sub">Guarda tu historial para respaldo personal o para analizar tu cumplimiento en el PC.</div>
+      <div class="modal-title">Sincronización y Datos</div>
+      <div class="modal-sub">Guarda o transfiere tu progreso entre tu PC y tu teléfono.</div>
       
-      <button class="modal-btn primary" onclick="exportDataJSON()">
-        💾 Descargar Backup Completo (JSON)
+      <button class="modal-btn primary" onclick="exportDataJSON()">💾 Descargar Backup (JSON)</button>
+      <button class="modal-btn secondary" onclick="document.getElementById('import-file').click()">
+        📥 Importar Backup (JSON)
       </button>
-      <button class="modal-btn" onclick="exportReportTXT()">
-        📄 Exportar Reporte de Cumplimiento (TXT)
-      </button>
+      <input type="file" id="import-file" accept=".json" style="display:none" onchange="importDataJSON(event)">
+      
+      <button class="modal-btn" onclick="exportReportTXT()">📄 Exportar Reporte (TXT)</button>
       <button class="modal-btn close" onclick="closeExportModal()">Cerrar</button>
     </div>
   </div>
 
   <script>
-    const routineData = [
+    // 1. Horario Lunes a Viernes
+    const routineWeekday = [
       { id: 't1', startM: 5*60+20, endM: 5*60+45, timeTxt: '05:20 am – 05:45 am', title: 'Despertar y Alistamiento', sub: 'Hidratación y alistamiento rápido' },
-      { id: 't2', startM: 6*60+0, endM: 14*60+15, timeTxt: '06:00 am – 02:15 pm', title: 'Turno en Melody Flowers', sub: 'Soporte IT (Almuerzo en la empresa: 12:20 pm)' },
-      { id: 't3', startM: 14*60+15, endM: 14*60+30, timeTxt: '02:15 pm – 02:30 pm', title: 'Regreso a Casa', sub: 'Trayecto de 15 minutos hacia El Rosal' },
-      { id: 't4', startM: 14*60+30, endM: 15*60+0, timeTxt: '02:30 pm – 03:00 pm', title: 'Pre-entreno y Cambio', sub: 'Ropa de gym y snack ligero / recarga' },
-      { id: 't5', startM: 15*60+0, endM: 16*60+30, timeTxt: '03:00 pm – 04:30 pm', title: 'Entrenamiento Físico', sub: 'Gym (FST-7 / hipertrofia) o running' },
-      { id: 't6', startM: 16*60+30, endM: 17*60+30, timeTxt: '04:30 pm – 05:30 pm', title: 'Ducha y Post-entreno', sub: 'Suplementación proteica y merienda sólida' },
-      { id: 't7', startM: 17*60+30, endM: 19*60+30, timeTxt: '05:30 pm – 07:30 pm', title: 'Bloque Estudio UNAD', sub: 'Plataforma virtual y tareas de ingeniería' },
-      { id: 't8', startM: 19*60+30, endM: 20*60+45, timeTxt: '07:30 pm – 08:45 pm', title: 'Laboratorio y Proyectos', sub: 'Ciberseguridad, homelab, Docker o Python' },
-      { id: 't9', startM: 20*60+45, endM: 21*60+30, timeTxt: '08:45 pm – 09:30 pm', title: 'Cena de Recuperación', sub: 'Cena completa para recuperación muscular' },
-      { id: 't10', startM: 21*60+30, endM: 22*60+0, timeTxt: '09:30 pm – 10:00 pm', title: 'Desconexión y Lectura', sub: 'Alistamiento mental y lectura estoica' },
-      { id: 't11', startM: 22*60+0, endM: 24*60+0, timeTxt: '10:00 pm', title: 'Dormir', sub: 'Descanso reparador (7h 20min)' }
+      { id: 't2', startM: 6*60+0, endM: 14*60+15, timeTxt: '06:00 am – 02:15 pm', title: 'Melody Flowers', sub: 'Soporte IT (Almuerzo 12:20 pm)' },
+      { id: 't3', startM: 14*60+15, endM: 14*60+30, timeTxt: '02:15 pm – 02:30 pm', title: 'Regreso a Casa', sub: 'Trayecto de 15 minutos' },
+      { id: 't4', startM: 14*60+30, endM: 15*60+0, timeTxt: '02:30 pm – 03:00 pm', title: 'Pre-entreno', sub: 'Cambio de ropa y snack' },
+      { id: 't5', startM: 15*60+0, endM: 16*60+30, timeTxt: '03:00 pm – 04:30 pm', title: 'Entrenamiento', sub: 'Gym (FST-7) o running' },
+      { id: 't6', startM: 16*60+30, endM: 17*60+30, timeTxt: '04:30 pm – 05:30 pm', title: 'Post-entreno', sub: 'Ducha y proteína' },
+      { id: 't7', startM: 17*60+30, endM: 19*60+30, timeTxt: '05:30 pm – 07:30 pm', title: 'Estudio UNAD', sub: 'Tareas de ingeniería' },
+      { id: 't8', startM: 19*60+30, endM: 20*60+45, timeTxt: '07:30 pm – 08:45 pm', title: 'Laboratorio Técnico', sub: 'Ciberseguridad, Docker, Python' },
+      { id: 't9', startM: 20*60+45, endM: 21*60+30, timeTxt: '08:45 pm – 09:30 pm', title: 'Cena', sub: 'Recuperación muscular' },
+      { id: 't10', startM: 21*60+30, endM: 22*60+0, timeTxt: '09:30 pm – 10:00 pm', title: 'Lectura Estoica', sub: 'Desconexión mental' },
+      { id: 't11', startM: 22*60+0, endM: 24*60+0, timeTxt: '10:00 pm', title: 'Dormir', sub: 'Descanso de 7h 20min' }
+    ];
+
+    // 2. Horario Sábados
+    const routineSaturday = [
+      { id: 's1', startM: 5*60+20, endM: 5*60+45, timeTxt: '05:20 am – 05:45 am', title: 'Despertar', sub: 'Alistamiento rápido' },
+      { id: 's2', startM: 6*60+0, endM: 12*60+5, timeTxt: '06:00 am – 12:05 pm', title: 'Melody Flowers', sub: 'Soporte IT media jornada' },
+      { id: 's3', startM: 12*60+5, endM: 12*60+20, timeTxt: '12:05 pm – 12:20 pm', title: 'Regreso a Casa', sub: 'Trayecto de 15 minutos' },
+      { id: 's4', startM: 12*60+20, endM: 13*60+30, timeTxt: '12:20 pm – 01:30 pm', title: 'Almuerzo y Descanso', sub: 'Recarga de energía' },
+      { id: 's5', startM: 13*60+30, endM: 15*60+30, timeTxt: '01:30 pm – 03:30 pm', title: 'Proyectos Personales', sub: 'Desarrollo, homelab o diseño' },
+      { id: 's6', startM: 15*60+30, endM: 18*60+0, timeTxt: '03:30 pm – 06:00 pm', title: 'MTB / Running', sub: 'Ruta en GW o carrera fondo' },
+      { id: 's7', startM: 18*60+0, endM: 20*60+0, timeTxt: '06:00 pm – 08:00 pm', title: 'Mundos Kids / Ocio', sub: 'Soporte o gaming en PC' },
+      { id: 's8', startM: 20*60+0, endM: 21*60+0, timeTxt: '08:00 pm – 09:00 pm', title: 'Cena', sub: 'Tiempo libre' },
+      { id: 's9', startM: 21*60+0, endM: 24*60+0, timeTxt: '09:00 pm', title: 'Dormir', sub: 'Descanso flexible' }
+    ];
+
+    // 3. Horario Domingos
+    const routineSunday = [
+      { id: 'd1', startM: 7*60+0, endM: 8*60+0, timeTxt: '07:00 am – 08:00 am', title: 'Despertar', sub: 'Descanso natural' },
+      { id: 'd2', startM: 8*60+0, endM: 12*60+0, timeTxt: '08:00 am – 12:00 pm', title: 'Ciclismo / Finca', sub: 'Fondo de ruta, MTB o visita a la finca' },
+      { id: 'd3', startM: 12*60+0, endM: 14*60+0, timeTxt: '12:00 pm – 02:00 pm', title: 'Almuerzo', sub: 'Almuerzo familiar tranquilo' },
+      { id: 'd4', startM: 14*60+0, endM: 18*60+0, timeTxt: '02:00 pm – 06:00 pm', title: 'Turno / Descanso', sub: 'Mundos Kids o pasatiempos' },
+      { id: 'd5', startM: 18*60+0, endM: 20*60+0, timeTxt: '06:00 pm – 08:00 pm', title: 'Organización Semanal', sub: 'UNAD To-Do y preparación' },
+      { id: 'd6', startM: 20*60+0, endM: 22*60+0, timeTxt: '08:00 pm – 10:00 pm', title: 'Cena y Desconexión', sub: 'Lectura o series' },
+      { id: 'd7', startM: 22*60+0, endM: 24*60+0, timeTxt: '10:00 pm', title: 'Dormir', sub: 'Preparación para el lunes' }
     ];
 
     let currentDate = new Date();
-    const listEl = document.getElementById('routine-list');
-    const barFill = document.getElementById('bar-fill');
-    const progressPct = document.getElementById('progress-pct');
-    const displayDate = document.getElementById('display-date');
-    const todayBtn = document.getElementById('today-btn');
+
+    function getRoutineForDate(d) {
+      const day = d.getDay(); // 0 = Domingo, 6 = Sábado
+      if (day === 0) return routineSunday;
+      if (day === 6) return routineSaturday;
+      return routineWeekday;
+    }
 
     function formatDateKey(d) {
       const year = d.getFullYear();
@@ -524,95 +249,79 @@
       return `${year}-${month}-${day}`;
     }
 
-    function getStorageKey(d) {
-      return `rutina_${formatDateKey(d)}`;
-    }
-
-    function isToday(d) {
-      const now = new Date();
-      return d.toDateString() === now.toDateString();
-    }
+    function getStorageKey(d) { return `rutina_${formatDateKey(d)}`; }
+    function isToday(d) { return d.toDateString() === new Date().toDateString(); }
 
     function calculateStreak() {
       let streak = 0;
       let checkDate = new Date();
       
-      // Si hoy no está completo aún, empezamos a contar desde ayer
       const todayKey = getStorageKey(checkDate);
       const todayState = JSON.parse(localStorage.getItem(todayKey)) || {};
       const todayDone = Object.values(todayState).filter(Boolean).length;
+      const todayTotal = getRoutineForDate(checkDate).length;
       
-      if (todayDone === routineData.length) {
-        streak++;
-      }
+      if (todayDone === todayTotal && todayTotal > 0) streak++;
       
       while (true) {
         checkDate.setDate(checkDate.getDate() - 1);
         const k = getStorageKey(checkDate);
         const st = JSON.parse(localStorage.getItem(k));
         if (!st) break;
+        
         const count = Object.values(st).filter(Boolean).length;
-        if (count >= Math.floor(routineData.length * 0.7)) { // Considera racha si cumpliste al menos el 70%
-          streak++;
-        } else {
-          break;
-        }
+        const totalForDay = getRoutineForDate(checkDate).length;
+        
+        if (count >= Math.floor(totalForDay * 0.7)) streak++;
+        else break;
       }
-      document.getElementById('streak-count').innerText = `${streak} ${streak === 1 ? 'día' : 'días'} de racha`;
+      document.getElementById('streak-count').innerText = `${streak} ${streak === 1 ? 'día' : 'días'}`;
     }
 
     function render() {
       const key = getStorageKey(currentDate);
       const state = JSON.parse(localStorage.getItem(key)) || {};
+      const activeRoutine = getRoutineForDate(currentDate);
 
-      // Actualizar texto de fecha
       const options = { weekday: 'short', month: 'short', day: 'numeric' };
       const formatted = currentDate.toLocaleDateString('es-ES', options).toUpperCase();
-      displayDate.innerText = isToday(currentDate) ? `HOY (${formatted})` : formatted;
-      todayBtn.style.display = isToday(currentDate) ? 'none' : 'block';
+      document.getElementById('display-date').innerText = isToday(currentDate) ? `HOY (${formatted})` : formatted;
+      document.getElementById('today-btn').style.display = isToday(currentDate) ? 'none' : 'block';
 
+      const listEl = document.getElementById('routine-list');
       listEl.innerHTML = '';
       let completed = 0;
-
       const now = new Date();
       const currentMinutes = now.getHours() * 60 + now.getMinutes();
 
-      routineData.forEach(item => {
+      activeRoutine.forEach(item => {
         const isDone = !!state[item.id];
         if (isDone) completed++;
-
         const isCurrent = isToday(currentDate) && (currentMinutes >= item.startM && currentMinutes < item.endM);
 
         const card = document.createElement('div');
         card.className = `task-item ${isDone ? 'is-completed' : ''} ${isCurrent ? 'is-current' : ''}`;
-        card.onclick = () => toggleTask(item.id);
+        card.onclick = () => toggleTask(item.id, activeRoutine);
 
         card.innerHTML = `
           <div class="task-info">
-            <div class="task-meta">
-              <span class="task-time">${item.timeTxt}</span>
-              <span class="current-badge">EN CURSO</span>
-            </div>
+            <div class="task-meta"><span class="task-time">${item.timeTxt}</span><span class="current-badge">EN CURSO</span></div>
             <div class="task-title">${item.title}</div>
             <div class="task-sub">${item.sub}</div>
           </div>
-          <div class="custom-check">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
-              <polyline points="20 6 9 17 4 12"></polyline>
-            </svg>
-          </div>
+          <div class="custom-check"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></div>
         `;
         listEl.appendChild(card);
       });
 
-      const pct = Math.round((completed / routineData.length) * 100);
-      barFill.style.width = `${pct}%`;
-      progressPct.innerText = `${pct}%`;
-
+      const pct = Math.round((completed / activeRoutine.length) * 100) || 0;
+      document.getElementById('bar-fill').style.width = `${pct}%`;
+      document.getElementById('progress-pct').innerText = `${pct}%`;
       calculateStreak();
     }
 
     function toggleTask(id) {
+      if (navigator.vibrate) navigator.vibrate(50); // Vibración háptica en móviles
       const key = getStorageKey(currentDate);
       const state = JSON.parse(localStorage.getItem(key)) || {};
       state[id] = !state[id];
@@ -620,103 +329,69 @@
       render();
     }
 
-    function changeDay(delta) {
-      currentDate.setDate(currentDate.getDate() + delta);
-      render();
-    }
-
-    function goToToday() {
-      currentDate = new Date();
-      render();
-    }
-
-    function confirmReset() {
-      if (confirm("¿Seguro que quieres desmarcar todos los bloques de este día?")) {
-        const key = getStorageKey(currentDate);
-        localStorage.removeItem(key);
-        render();
-      }
-    }
-
+    function changeDay(delta) { currentDate.setDate(currentDate.getDate() + delta); render(); }
+    function goToToday() { currentDate = new Date(); render(); }
+    function confirmReset() { if (confirm("¿Seguro que quieres desmarcar los bloques de este día?")) { localStorage.removeItem(getStorageKey(currentDate)); render(); } }
+    
     function updateClock() {
       const now = new Date();
-      let hours = now.getHours();
-      const mins = String(now.getMinutes()).padStart(2, '0');
-      const secs = String(now.getSeconds()).padStart(2, '0');
+      let hours = now.getHours(), mins = String(now.getMinutes()).padStart(2, '0'), secs = String(now.getSeconds()).padStart(2, '0');
       const ampm = hours >= 12 ? 'PM' : 'AM';
-      hours = hours % 12 || 12;
-      document.getElementById('current-time').innerText = `${hours}:${mins}:${secs} ${ampm}`;
+      document.getElementById('current-time').innerText = `${hours % 12 || 12}:${mins}:${secs} ${ampm}`;
     }
 
-    // Modal & Exportación
-    function openExportModal() {
-      document.getElementById('export-modal').style.display = 'flex';
-    }
-
-    function closeExportModal() {
-      document.getElementById('export-modal').style.display = 'none';
-    }
-
+    // Modal, Exportar e Importar
+    function openExportModal() { document.getElementById('export-modal').style.display = 'flex'; }
+    function closeExportModal() { document.getElementById('export-modal').style.display = 'none'; }
+    
     function exportDataJSON() {
-      const allData = {};
+      const data = {};
       for (let i = 0; i < localStorage.length; i++) {
         const k = localStorage.key(i);
-        if (k.startsWith('rutina_')) {
-          allData[k] = JSON.parse(localStorage.getItem(k));
-        }
+        if (k.startsWith('rutina_')) data[k] = JSON.parse(localStorage.getItem(k));
       }
-      const blob = new Blob([JSON.stringify(allData, null, 2)], { type: 'application/json' });
-      downloadFile(blob, `rutina_backup_${formatDateKey(new Date())}.json`);
-      closeExportModal();
+      downloadFile(new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' }), `rutina_${formatDateKey(new Date())}.json`);
+    }
+
+    function importDataJSON(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        try {
+          const imported = JSON.parse(e.target.result);
+          Object.keys(imported).forEach(k => { if (k.startsWith('rutina_')) localStorage.setItem(k, JSON.stringify(imported[k])); });
+          alert("¡Sincronización completada con éxito!");
+          render();
+          closeExportModal();
+        } catch (error) { alert("Archivo no válido."); }
+      };
+      reader.readAsText(file);
     }
 
     function exportReportTXT() {
-      let report = `REPORTE DE SEGUIMIENTO DE RUTINA\nGenerado: ${new Date().toLocaleString('es-CO')}\n`;
-      report += `=========================================\n\n`;
-
-      const keys = [];
-      for (let i = 0; i < localStorage.length; i++) {
-        const k = localStorage.key(i);
-        if (k.startsWith('rutina_')) keys.push(k);
-      }
-      keys.sort();
-
-      if (keys.length === 0) {
-        report += "No hay registros guardados aún.\n";
-      } else {
-        keys.forEach(k => {
-          const dateStr = k.replace('rutina_', '');
-          const state = JSON.parse(localStorage.getItem(k)) || {};
-          const done = Object.values(state).filter(Boolean).length;
-          const pct = Math.round((done / routineData.length) * 100);
-          report += `Fecha: ${dateStr} | Cumplimiento: ${pct}% (${done}/${routineData.length} bloques)\n`;
-        });
-      }
-
-      const blob = new Blob([report], { type: 'text/plain;charset=utf-8' });
-      downloadFile(blob, `rutina_reporte_${formatDateKey(new Date())}.txt`);
-      closeExportModal();
+      let r = `REPORTE DE RUTINA\nGenerado: ${new Date().toLocaleString('es-CO')}\n==============\n\n`;
+      let keys = [];
+      for (let i = 0; i < localStorage.length; i++) { if (localStorage.key(i).startsWith('rutina_')) keys.push(localStorage.key(i)); }
+      keys.sort().forEach(k => {
+        const dStr = k.replace('rutina_', '');
+        const [y, m, d] = dStr.split('-');
+        const routineDay = getRoutineForDate(new Date(y, m - 1, d));
+        const st = JSON.parse(localStorage.getItem(k)) || {};
+        const done = Object.values(st).filter(Boolean).length;
+        r += `Fecha: ${dStr} | Cumplimiento: ${Math.round((done / routineDay.length) * 100) || 0}% (${done}/${routineDay.length})\n`;
+      });
+      downloadFile(new Blob([r], { type: 'text/plain;charset=utf-8' }), `reporte_${formatDateKey(new Date())}.txt`);
     }
 
     function downloadFile(blob, filename) {
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = filename;
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
-      URL.revokeObjectURL(url);
+      const url = URL.createObjectURL(blob), a = document.createElement('a');
+      a.href = url; a.download = filename; document.body.appendChild(a); a.click(); document.body.removeChild(a); URL.revokeObjectURL(url);
     }
 
     setInterval(updateClock, 1000);
-    setInterval(() => {
-      // Re-evaluar bloque en curso cada minuto
-      if (isToday(currentDate)) render();
-    }, 60000);
-
-    updateClock();
-    render();
+    setInterval(() => { if (isToday(currentDate)) render(); }, 60000);
+    updateClock(); render();
   </script>
 </body>
 </html>
