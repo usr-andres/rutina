@@ -59,6 +59,11 @@
       padding: 0.3rem 0.65rem; border-radius: 999px; width: fit-content;
     }
 
+    .cloud-status {
+      font-size: 0.7rem; color: #60a5fa; font-weight: 700;
+      display: flex; align-items: center; gap: 0.3rem; margin-top: 0.2rem;
+    }
+
     .date-nav {
       background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 18px;
       padding: 0.6rem 0.8rem; display: flex; align-items: center; justify-content: space-between; backdrop-filter: blur(14px);
@@ -123,17 +128,6 @@
     .task-item.is-completed .custom-check { background: var(--accent); border-color: var(--accent); box-shadow: 0 0 12px var(--accent-glow); }
     .custom-check svg { opacity: 0; transform: scale(0.5); transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1); }
     .task-item.is-completed .custom-check svg { opacity: 1; transform: scale(1); }
-
-    .modal-backdrop { display: none; position: fixed; inset: 0; background: rgba(0, 0, 0, 0.75); backdrop-filter: blur(8px); z-index: 99; align-items: center; justify-content: center; padding: 1rem; }
-    .modal-card { background: #121829; border: 1px solid var(--card-border); border-radius: 20px; padding: 1.4rem; width: 100%; max-width: 380px; display: flex; flex-direction: column; gap: 1rem; }
-    .modal-title { font-size: 1.1rem; font-weight: 700; }
-    .modal-sub { font-size: 0.82rem; color: var(--text-muted); line-height: 1.4; }
-    
-    .modal-btn { background: rgba(255, 255, 255, 0.06); border: 1px solid var(--card-border); color: var(--text-main); padding: 0.75rem; border-radius: 12px; font-size: 0.85rem; font-weight: 600; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 0.5rem; transition: 0.2s; }
-    .modal-btn:hover { background: rgba(255, 255, 255, 0.1); }
-    .modal-btn.primary { background: var(--accent); color: #052e16; border-color: var(--accent); }
-    .modal-btn.secondary { background: #3b82f6; color: #fff; border-color: #3b82f6; }
-    .modal-btn.close { background: transparent; border: none; color: var(--text-muted); margin-top: 0.2rem; }
   </style>
 </head>
 <body>
@@ -143,16 +137,17 @@
       <div class="header-left">
         <div class="current-clock" id="current-time">00:00:00 AM</div>
         <div class="streak-badge"><span>🔥</span> <span id="streak-count">0 días de racha</span></div>
+        <div class="cloud-status">☁️ Sincronizado en la nube</div>
       </div>
     </header>
 
     <div class="date-nav">
-      <button class="nav-btn" onclick="changeDay(-1)">‹</button>
+      <button class="nav-btn" onclick="window.changeDay(-1)">‹</button>
       <div class="date-display">
         <div class="date-title" id="display-date">Hoy</div>
-        <div class="today-pill" onclick="goToToday()" id="today-btn">VOLVER A HOY</div>
+        <div class="today-pill" onclick="window.goToToday()" id="today-btn">VOLVER A HOY</div>
       </div>
-      <button class="nav-btn" onclick="changeDay(1)">›</button>
+      <button class="nav-btn" onclick="window.changeDay(1)">›</button>
     </div>
 
     <div class="progress-card">
@@ -164,37 +159,38 @@
     </div>
 
     <div class="actions-row">
-      <button class="action-btn reset" onclick="confirmReset()">
+      <button class="action-btn reset" onclick="window.confirmReset()">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>
         Reiniciar día
       </button>
-      <button class="action-btn" onclick="openExportModal()">
+      <button class="action-btn" onclick="window.exportReportTXT()">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-        Sincronizar
+        Descargar Reporte
       </button>
     </div>
 
     <div class="routine-list" id="routine-list"></div>
   </div>
 
-  <div class="modal-backdrop" id="export-modal">
-    <div class="modal-card">
-      <div class="modal-title">Sincronización y Datos</div>
-      <div class="modal-sub">Guarda o transfiere tu progreso entre tu PC y tu teléfono.</div>
-      
-      <button class="modal-btn primary" onclick="exportDataJSON()">💾 Descargar Backup (JSON)</button>
-      <button class="modal-btn secondary" onclick="document.getElementById('import-file').click()">
-        📥 Importar Backup (JSON)
-      </button>
-      <input type="file" id="import-file" accept=".json" style="display:none" onchange="importDataJSON(event)">
-      
-      <button class="modal-btn" onclick="exportReportTXT()">📄 Exportar Reporte (TXT)</button>
-      <button class="modal-btn close" onclick="closeExportModal()">Cerrar</button>
-    </div>
-  </div>
+  <!-- SCRIPT TIPO MODULE PARA FIREBASE -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.4.0/firebase-app.js";
+    import { getFirestore, doc, setDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.4.0/firebase-firestore.js";
 
-  <script>
-    // 1. Horario Lunes a Viernes
+    // Configuración de Firebase de Andrés
+    const firebaseConfig = {
+      apiKey: "AIzaSyAlXClViJX5enZkc3BMMSRpnekZx70Vc8I",
+      authDomain: "rutina-e7cf5.firebaseapp.com",
+      projectId: "rutina-e7cf5",
+      storageBucket: "rutina-e7cf5.firebasestorage.app",
+      messagingSenderId: "488120227552",
+      appId: "1:488120227552:web:435825e803e34053d86285",
+      measurementId: "G-LP28PDKD2W"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
     const routineWeekday = [
       { id: 't1', startM: 5*60+20, endM: 5*60+45, timeTxt: '05:20 am – 05:45 am', title: 'Despertar y Alistamiento', sub: 'Hidratación y alistamiento rápido' },
       { id: 't2', startM: 6*60+0, endM: 14*60+15, timeTxt: '06:00 am – 02:15 pm', title: 'Melody Flowers', sub: 'Soporte IT (Almuerzo 12:20 pm)' },
@@ -209,7 +205,6 @@
       { id: 't11', startM: 22*60+0, endM: 24*60+0, timeTxt: '10:00 pm', title: 'Dormir', sub: 'Descanso de 7h 20min' }
     ];
 
-    // 2. Horario Sábados
     const routineSaturday = [
       { id: 's1', startM: 5*60+20, endM: 5*60+45, timeTxt: '05:20 am – 05:45 am', title: 'Despertar', sub: 'Alistamiento rápido' },
       { id: 's2', startM: 6*60+0, endM: 12*60+5, timeTxt: '06:00 am – 12:05 pm', title: 'Melody Flowers', sub: 'Soporte IT media jornada' },
@@ -222,7 +217,6 @@
       { id: 's9', startM: 21*60+0, endM: 24*60+0, timeTxt: '09:00 pm', title: 'Dormir', sub: 'Descanso flexible' }
     ];
 
-    // 3. Horario Domingos
     const routineSunday = [
       { id: 'd1', startM: 7*60+0, endM: 8*60+0, timeTxt: '07:00 am – 08:00 am', title: 'Despertar', sub: 'Descanso natural' },
       { id: 'd2', startM: 8*60+0, endM: 12*60+0, timeTxt: '08:00 am – 12:00 pm', title: 'Ciclismo / Finca', sub: 'Fondo de ruta, MTB o visita a la finca' },
@@ -234,29 +228,26 @@
     ];
 
     let currentDate = new Date();
+    let firestoreUnsubscribe = null; // Para detener la escucha al cambiar de día
 
     function getRoutineForDate(d) {
-      const day = d.getDay(); // 0 = Domingo, 6 = Sábado
+      const day = d.getDay();
       if (day === 0) return routineSunday;
       if (day === 6) return routineSaturday;
       return routineWeekday;
     }
 
     function formatDateKey(d) {
-      const year = d.getFullYear();
-      const month = String(d.getMonth() + 1).padStart(2, '0');
-      const day = String(d.getDate()).padStart(2, '0');
-      return `${year}-${month}-${day}`;
+      return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
     }
 
-    function getStorageKey(d) { return `rutina_${formatDateKey(d)}`; }
     function isToday(d) { return d.toDateString() === new Date().toDateString(); }
 
     function calculateStreak() {
       let streak = 0;
       let checkDate = new Date();
       
-      const todayKey = getStorageKey(checkDate);
+      const todayKey = `rutina_${formatDateKey(checkDate)}`;
       const todayState = JSON.parse(localStorage.getItem(todayKey)) || {};
       const todayDone = Object.values(todayState).filter(Boolean).length;
       const todayTotal = getRoutineForDate(checkDate).length;
@@ -265,7 +256,7 @@
       
       while (true) {
         checkDate.setDate(checkDate.getDate() - 1);
-        const k = getStorageKey(checkDate);
+        const k = `rutina_${formatDateKey(checkDate)}`;
         const st = JSON.parse(localStorage.getItem(k));
         if (!st) break;
         
@@ -279,7 +270,7 @@
     }
 
     function render() {
-      const key = getStorageKey(currentDate);
+      const key = `rutina_${formatDateKey(currentDate)}`;
       const state = JSON.parse(localStorage.getItem(key)) || {};
       const activeRoutine = getRoutineForDate(currentDate);
 
@@ -301,7 +292,7 @@
 
         const card = document.createElement('div');
         card.className = `task-item ${isDone ? 'is-completed' : ''} ${isCurrent ? 'is-current' : ''}`;
-        card.onclick = () => toggleTask(item.id, activeRoutine);
+        card.onclick = () => window.toggleTask(item.id);
 
         card.innerHTML = `
           <div class="task-info">
@@ -320,56 +311,61 @@
       calculateStreak();
     }
 
-    function toggleTask(id) {
-      if (navigator.vibrate) navigator.vibrate(50); // Vibración háptica en móviles
-      const key = getStorageKey(currentDate);
-      const state = JSON.parse(localStorage.getItem(key)) || {};
-      state[id] = !state[id];
-      localStorage.setItem(key, JSON.stringify(state));
-      render();
-    }
-
-    function changeDay(delta) { currentDate.setDate(currentDate.getDate() + delta); render(); }
-    function goToToday() { currentDate = new Date(); render(); }
-    function confirmReset() { if (confirm("¿Seguro que quieres desmarcar los bloques de este día?")) { localStorage.removeItem(getStorageKey(currentDate)); render(); } }
-    
-    function updateClock() {
-      const now = new Date();
-      let hours = now.getHours(), mins = String(now.getMinutes()).padStart(2, '0'), secs = String(now.getSeconds()).padStart(2, '0');
-      const ampm = hours >= 12 ? 'PM' : 'AM';
-      document.getElementById('current-time').innerText = `${hours % 12 || 12}:${mins}:${secs} ${ampm}`;
-    }
-
-    // Modal, Exportar e Importar
-    function openExportModal() { document.getElementById('export-modal').style.display = 'flex'; }
-    function closeExportModal() { document.getElementById('export-modal').style.display = 'none'; }
-    
-    function exportDataJSON() {
-      const data = {};
-      for (let i = 0; i < localStorage.length; i++) {
-        const k = localStorage.key(i);
-        if (k.startsWith('rutina_')) data[k] = JSON.parse(localStorage.getItem(k));
-      }
-      downloadFile(new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' }), `rutina_${formatDateKey(new Date())}.json`);
-    }
-
-    function importDataJSON(event) {
-      const file = event.target.files[0];
-      if (!file) return;
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        try {
-          const imported = JSON.parse(e.target.result);
-          Object.keys(imported).forEach(k => { if (k.startsWith('rutina_')) localStorage.setItem(k, JSON.stringify(imported[k])); });
-          alert("¡Sincronización completada con éxito!");
+    // ----- LOGICA DE FIREBASE (SINCRONIZACIÓN) -----
+    function listenToDay(dateKey) {
+      if (firestoreUnsubscribe) firestoreUnsubscribe(); // Detener escucha anterior
+      
+      const docRef = doc(db, "rutinas", dateKey);
+      firestoreUnsubscribe = onSnapshot(docRef, (docSnap) => {
+        if (docSnap.exists()) {
+          const cloudData = docSnap.data();
+          // Guardar en local lo que vino de la nube
+          localStorage.setItem(`rutina_${dateKey}`, JSON.stringify(cloudData));
           render();
-          closeExportModal();
-        } catch (error) { alert("Archivo no válido."); }
-      };
-      reader.readAsText(file);
+        }
+      });
     }
 
-    function exportReportTXT() {
+    window.toggleTask = function(id) {
+      if (navigator.vibrate) navigator.vibrate(50);
+      
+      const dateKey = formatDateKey(currentDate);
+      const storageKey = `rutina_${dateKey}`;
+      const state = JSON.parse(localStorage.getItem(storageKey)) || {};
+      
+      state[id] = !state[id];
+      
+      // 1. Guardar localmente para velocidad inmediata
+      localStorage.setItem(storageKey, JSON.stringify(state));
+      render();
+      
+      // 2. Enviar a Firebase en segundo plano
+      setDoc(doc(db, "rutinas", dateKey), state)
+        .catch(error => console.error("Error guardando en la nube:", error));
+    };
+
+    window.changeDay = function(delta) { 
+      currentDate.setDate(currentDate.getDate() + delta); 
+      render();
+      listenToDay(formatDateKey(currentDate)); // Escuchar el nuevo día
+    };
+    
+    window.goToToday = function() { 
+      currentDate = new Date(); 
+      render();
+      listenToDay(formatDateKey(currentDate));
+    };
+
+    window.confirmReset = function() { 
+      if (confirm("¿Seguro que quieres desmarcar los bloques de este día?")) { 
+        const dateKey = formatDateKey(currentDate);
+        localStorage.removeItem(`rutina_${dateKey}`);
+        setDoc(doc(db, "rutinas", dateKey), {}); // Borrar en la nube también
+        render(); 
+      } 
+    };
+
+    window.exportReportTXT = function() {
       let r = `REPORTE DE RUTINA\nGenerado: ${new Date().toLocaleString('es-CO')}\n==============\n\n`;
       let keys = [];
       for (let i = 0; i < localStorage.length; i++) { if (localStorage.key(i).startsWith('rutina_')) keys.push(localStorage.key(i)); }
@@ -381,17 +377,25 @@
         const done = Object.values(st).filter(Boolean).length;
         r += `Fecha: ${dStr} | Cumplimiento: ${Math.round((done / routineDay.length) * 100) || 0}% (${done}/${routineDay.length})\n`;
       });
-      downloadFile(new Blob([r], { type: 'text/plain;charset=utf-8' }), `reporte_${formatDateKey(new Date())}.txt`);
+      const url = URL.createObjectURL(new Blob([r], { type: 'text/plain;charset=utf-8' }));
+      const a = document.createElement('a'); a.href = url; a.download = `reporte_${formatDateKey(new Date())}.txt`;
+      document.body.appendChild(a); a.click(); document.body.removeChild(a); URL.revokeObjectURL(url);
+    };
+
+    function updateClock() {
+      const now = new Date();
+      let hours = now.getHours(), mins = String(now.getMinutes()).padStart(2, '0'), secs = String(now.getSeconds()).padStart(2, '0');
+      const ampm = hours >= 12 ? 'PM' : 'AM';
+      document.getElementById('current-time').innerText = `${hours % 12 || 12}:${mins}:${secs} ${ampm}`;
     }
 
-    function downloadFile(blob, filename) {
-      const url = URL.createObjectURL(blob), a = document.createElement('a');
-      a.href = url; a.download = filename; document.body.appendChild(a); a.click(); document.body.removeChild(a); URL.revokeObjectURL(url);
-    }
-
+    // Inicialización al cargar la página
     setInterval(updateClock, 1000);
     setInterval(() => { if (isToday(currentDate)) render(); }, 60000);
-    updateClock(); render();
+    updateClock(); 
+    render();
+    listenToDay(formatDateKey(currentDate)); // Empezar a escuchar a Firebase hoy
+
   </script>
 </body>
 </html>
